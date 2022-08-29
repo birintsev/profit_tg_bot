@@ -1,0 +1,289 @@
+/*
+ private InlineKeyboardMarkup setProducts(List<InlineKeyboardButton> td) throws TelegramApiException {
+         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+         td = new ArrayList<>();
+
+         InlineKeyboardButton inlineKeyboardButtonBread = new InlineKeyboardButton();
+         inlineKeyboardButtonBread.setText("Хліби");
+         inlineKeyboardButtonBread.setCallbackData("bread");
+
+         InlineKeyboardButton inlineKeyboardButtonCake = new InlineKeyboardButton();
+         inlineKeyboardButtonCake.setText("Торти");
+         inlineKeyboardButtonCake.setCallbackData("cake");
+
+         InlineKeyboardButton inlineKeyboardButtonCupcake = new InlineKeyboardButton();
+         inlineKeyboardButtonCupcake.setText("Тістечка");
+         inlineKeyboardButtonCake.setCallbackData("cupcake");
+
+         InlineKeyboardButton inlineKeyboardButtonPie = new InlineKeyboardButton();
+         inlineKeyboardButtonPie.setText("Круасани");
+         inlineKeyboardButtonPie.setCallbackData("pie");
+
+         td.add(inlineKeyboardButtonBread);
+         td.add(inlineKeyboardButtonCake);
+         td.add(inlineKeyboardButtonCupcake);
+         td.add(inlineKeyboardButtonPie);
+
+         List<List<InlineKeyboardButton>> tr = new ArrayList<>();
+         tr.add(td);
+
+         inlineKeyboardMarkup.setKeyboard(tr);
+
+         return inlineKeyboardMarkup;
+     }
+ */
+
+ /*
+ }
+
+         } else if (update.hasCallbackQuery()) {
+
+             CallbackQuery callbackQuery = update.getCallbackQuery();
+             String chatIdCallbackQuery = callbackQuery.getFrom().getId().toString();
+             String data = callbackQuery.getData();
+
+             if (data.equals("bread")) {
+                 String bread = "Оберіть, який саме хліб Ви хочете замовити, " +
+                         "вказавши один із вказаних номерів:";
+                 try {
+                     sendText(chatIdCallbackQuery, bread);
+                 } catch (TelegramApiException e) {
+                     e.printStackTrace();
+                 }
+                 try {
+                     setBread(chatIdCallbackQuery);
+                 } catch (TelegramApiException e) {
+                     e.printStackTrace();
+                 }
+             } else if (data.equals("cake")) {
+                 String cake = "Оберіть, який саме торт Ви хочете замовити, " +
+                         "вказавши один із вказаних номерів:";
+                 try {
+                     sendText(chatIdCallbackQuery, cake);
+                 } catch (TelegramApiException e) {
+                     e.printStackTrace();
+                 }
+                 try {
+                     setCake(chatIdCallbackQuery);
+                 } catch (TelegramApiException e) {
+                     e.printStackTrace();
+                 }
+             } else if (data.equals("cupcake")) {
+                 String cupcake = "Оберіть, яке саме тістечко Ви хочете замовити, " +
+                         "вказавши один із вказаних номерів:";
+                 try {
+                     sendText(chatIdCallbackQuery, cupcake);
+                 } catch (TelegramApiException e) {
+                     e.printStackTrace();
+                 }
+                 try {
+                     setCupcake(chatIdCallbackQuery);
+                 } catch (TelegramApiException e) {
+                     e.printStackTrace();
+                 }
+             } else if (data.equals("pie")) {
+                 String pie = "Оберіть, який саме круасан Ви хочете замовити, " +
+                         "вказавши один із вказаних номерів:";
+                 try {
+                     sendText(chatIdCallbackQuery, pie);
+                 } catch (TelegramApiException e) {
+                     e.printStackTrace();
+                 }
+                 try {
+                     setPie(chatIdCallbackQuery);
+                 } catch (TelegramApiException e) {
+                     e.printStackTrace();
+                 }
+             }
+         }
+     }
+
+     private InlineKeyboardMarkup setProducts(List<InlineKeyboardButton> td) {
+         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+         td = new ArrayList<>();
+
+         InlineKeyboardButton inlineKeyboardButtonFirst = new InlineKeyboardButton();
+         inlineKeyboardButtonFirst.setText("");
+
+         InlineKeyboardButton inlineKeyboardButtonSecond = new InlineKeyboardButton();
+         inlineKeyboardButtonSecond.setText("");
+
+         InlineKeyboardButton inlineKeyboardButtonThird = new InlineKeyboardButton();
+         inlineKeyboardButtonThird.setText("");
+
+         InlineKeyboardButton inlineKeyboardButtonFourth = new InlineKeyboardButton();
+         inlineKeyboardButtonFourth.setText("");
+
+         InlineKeyboardButton inlineKeyboardButtonFifth = new InlineKeyboardButton();
+         inlineKeyboardButtonFifth.setText("");
+
+         td.add(inlineKeyboardButtonFirst);
+         td.add(inlineKeyboardButtonSecond);
+         td.add(inlineKeyboardButtonThird);
+         td.add(inlineKeyboardButtonFourth);
+         td.add(inlineKeyboardButtonFifth);
+
+         List<List<InlineKeyboardButton>> tr = new ArrayList<>();
+         tr.add(td);
+
+         inlineKeyboardMarkup.setKeyboard(tr);
+
+         return inlineKeyboardMarkup;
+     }
+
+     private void setCake(String chatId) throws TelegramApiException {
+         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+         List<InlineKeyboardButton> td = new ArrayList<>();
+
+         InlineKeyboardButton inlineKeyboardButtonFirstCake = new InlineKeyboardButton();
+         inlineKeyboardButtonFirstCake.setText("Київський");
+         inlineKeyboardButtonFirstCake.setCallbackData("first_cake");
+
+         InlineKeyboardButton inlineKeyboardButtonSecondCake = new InlineKeyboardButton();
+         inlineKeyboardButtonSecondCake.setText("Мадонна");
+         inlineKeyboardButtonSecondCake.setCallbackData("second_cake");
+
+         InlineKeyboardButton inlineKeyboardButtonThirdCake = new InlineKeyboardButton();
+         inlineKeyboardButtonThirdCake.setText("Сакура");
+         inlineKeyboardButtonThirdCake.setCallbackData("third_cake");
+
+         InlineKeyboardButton inlineKeyboardButtonFourthCake = new InlineKeyboardButton();
+         inlineKeyboardButtonFourthCake.setText("Йогуртовий");
+         inlineKeyboardButtonFourthCake.setCallbackData("fourth_cake");
+
+         InlineKeyboardButton inlineKeyboardButtonFifthCake = new InlineKeyboardButton();
+         inlineKeyboardButtonFifthCake.setText("Деметра");
+         inlineKeyboardButtonFifthCake.setCallbackData("fifth_cake");
+
+         td.add(inlineKeyboardButtonFirstCake);
+         td.add(inlineKeyboardButtonSecondCake);
+         td.add(inlineKeyboardButtonThirdCake);
+         td.add(inlineKeyboardButtonFourthCake);
+         td.add(inlineKeyboardButtonFifthCake);
+
+         List<List<InlineKeyboardButton>> tr_cake = new ArrayList<>();
+         tr_cake.add(td);
+
+         inlineKeyboardMarkup.setKeyboard(tr_cake);
+
+         SendMessage sendMessage = new SendMessage();
+         sendMessage.setChatId(chatId);
+         sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+         execute(sendMessage);
+     }
+
+     private void setCupcake(String chatId) throws TelegramApiException {
+         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+         List<InlineKeyboardButton> td = new ArrayList<>();
+
+         InlineKeyboardButton inlineKeyboardButtonFirstCupcake = new InlineKeyboardButton();
+         inlineKeyboardButtonFirstCupcake.setText("Еклер");
+         inlineKeyboardButtonFirstCupcake.setCallbackData("first_cupcake");
+
+         InlineKeyboardButton inlineKeyboardButtonSecondCupcake = new InlineKeyboardButton();
+         inlineKeyboardButtonSecondCupcake.setText("Лимонне");
+         inlineKeyboardButtonSecondCupcake.setCallbackData("second_cupcake");
+
+         InlineKeyboardButton inlineKeyboardButtonThirdCupcake = new InlineKeyboardButton();
+         inlineKeyboardButtonThirdCupcake.setText("Спартак");
+         inlineKeyboardButtonThirdCupcake.setCallbackData("third_cupcake");
+
+         InlineKeyboardButton inlineKeyboardButtonFourthCupcake = new InlineKeyboardButton();
+         inlineKeyboardButtonFourthCupcake.setText("Корзинка");
+         inlineKeyboardButtonFourthCupcake.setCallbackData("fourth_cupcake");
+
+         InlineKeyboardButton inlineKeyboardButtonFifthCupcake = new InlineKeyboardButton();
+         inlineKeyboardButtonFifthCupcake.setText("Медове");
+         inlineKeyboardButtonFifthCupcake.setCallbackData("fifth_cupcake");
+
+         td.add(inlineKeyboardButtonFirstCupcake);
+         td.add(inlineKeyboardButtonSecondCupcake);
+         td.add(inlineKeyboardButtonThirdCupcake);
+         td.add(inlineKeyboardButtonFourthCupcake);
+         td.add(inlineKeyboardButtonFifthCupcake);
+
+         List<List<InlineKeyboardButton>> tr_cupcake = new ArrayList<>();
+         tr_cupcake.add(td);
+
+         inlineKeyboardMarkup.setKeyboard(tr_cupcake);
+
+         SendMessage sendMessage = new SendMessage();
+         sendMessage.setChatId(chatId);
+         sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+         execute(sendMessage);
+     }
+
+     private void setPie(String chatId) throws TelegramApiException {
+         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+         List<InlineKeyboardButton> td = new ArrayList<>();
+
+         InlineKeyboardButton inlineKeyboardButtonFirstPie = new InlineKeyboardButton();
+         inlineKeyboardButtonFirstPie.setText("З вишнею");
+         inlineKeyboardButtonFirstPie.setCallbackData("first_pie");
+
+         InlineKeyboardButton inlineKeyboardButtonSecondPie = new InlineKeyboardButton();
+         inlineKeyboardButtonSecondPie.setText("Зі згущеним молоком");
+         inlineKeyboardButtonSecondPie.setCallbackData("second_pie");
+
+         InlineKeyboardButton inlineKeyboardButtonThirdPie = new InlineKeyboardButton();
+         inlineKeyboardButtonThirdPie.setText("З малиною");
+         inlineKeyboardButtonThirdPie.setCallbackData("third_pie");
+
+         InlineKeyboardButton inlineKeyboardButtonFourthPie = new InlineKeyboardButton();
+         inlineKeyboardButtonFourthPie.setText("З шоколадом");
+         inlineKeyboardButtonFourthPie.setCallbackData("fourth_pie");
+
+         InlineKeyboardButton inlineKeyboardButtonFifthPie = new InlineKeyboardButton();
+         inlineKeyboardButtonFifthPie.setText("Зі смородиною");
+         inlineKeyboardButtonFifthPie.setCallbackData("fifth_pie");
+
+         td.add(inlineKeyboardButtonFirstPie);
+         td.add(inlineKeyboardButtonSecondPie);
+         td.add(inlineKeyboardButtonThirdPie);
+         td.add(inlineKeyboardButtonFourthPie);
+         td.add(inlineKeyboardButtonFifthPie);
+
+         List<List<InlineKeyboardButton>> tr_pie = new ArrayList<>();
+         tr_pie.add(td);
+
+         inlineKeyboardMarkup.setKeyboard(tr_pie);
+
+         SendMessage sendMessage = new SendMessage();
+         sendMessage.setChatId(chatId);
+         sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+         execute(sendMessage);
+     }
+
+     private void sendText (String chatId, String text) throws TelegramApiException {
+             SendMessage sendMessage = new SendMessage();
+             sendMessage.setText(text);
+             sendMessage.setChatId(chatId);
+             execute(sendMessage);
+     }
+ }
+*/
+
+/*
+   public List<List<InlineKeyboardButton>> createInlineButton(List<List<String>> buttonsName) {
+        List<List<InlineKeyboardButton>> keyBoardList = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardRow = new ArrayList<>();
+        InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
+        for (List<String> buttonName : buttonsName) {
+            for (String name : buttonName) {
+                keyboardRow.add(new InlineKeyboardButton(name));
+                inlineKeyboardButton.setText(name);
+                inlineKeyboardButton.setCallbackData(name);
+            }
+            keyBoardList.add(keyboardRow);
+        }
+
+            InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+            inlineKeyboardMarkup.setKeyboard(keyBoardList);
+            return (List<List<InlineKeyboardButton>>) inlineKeyboardMarkup;
+
+    }
+    */
+
+
+
+
