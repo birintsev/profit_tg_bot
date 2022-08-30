@@ -3,6 +3,7 @@ package org.profit.telegrambot;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -13,33 +14,56 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.profit.telegrambot.AntiHardcode.*;
 
 public class TgBot extends TelegramLongPollingBot {
 
-
     @Override
     public void onUpdateReceived(Update update) {
-        String chatId = update.getMessage().getChatId().toString();
-        String message = update.getMessage().getText();
 
+        if (update.hasMessage()){
+            String chatId = update.getMessage().getChatId().toString();
+            String message = update.getMessage().getText();
 
-        switch (message) {
-            case "Main Page", "/start", "Shop's Info" -> firstKeyboard(chatId, message);
-            case "Go Shopping", "Forward", "Back" -> keyboard(chatId, message);
+            switch (message) {
+                case "Main Page", "/start", "Shop's Info" -> firstKeyboard(chatId, message);
+                case "Go Shopping", "Forward", "Back" -> keyboard(chatId, message);
+            }
+
+        } else if (update.hasCallbackQuery()) {
+
+            String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
+            String callData = update.getCallbackQuery().getData();
+            int messageId = update.getCallbackQuery().getMessage().getMessageId();
+
+            if (callData.equals("Added")){
+
+                String answer = "Added " + addCounter;
+                EditMessageText newMessage = new EditMessageText();
+                newMessage.setChatId(chatId);
+                newMessage.setMessageId(messageId);
+                newMessage.setText(answer);
+                addCounter ++;
+
+                try {
+                    execute(newMessage);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+
+
     }
 
-    public synchronized void sendPhoto(String chatId, long pageCounter) {
+    public synchronized void sendPhoto(String chatId, int pageCounter) {
+
+        AntiHardcode antiHardcode = new AntiHardcode();
+        antiHardcode.chosePath(pageCounter);
 
         SendPhoto photo = new SendPhoto();
         photo.setChatId(chatId);
-        if (pageCounter == 1) {
-            photo.setPhoto(new InputFile("https://imgur.com/a/dIc6rlc"));
-            photo.setCaption("Photo of product 1");
-        } else if (pageCounter == 2) {
-            photo.setPhoto(new InputFile("https://imgur.com/gallery/WaiBLIE"));
-            photo.setCaption("Photo of product 2");
-        }
+        photo.setPhoto(new InputFile(imagePath));
 
         try {
             execute(photo);
@@ -80,7 +104,7 @@ public class TgBot extends TelegramLongPollingBot {
 
     }
 
-    long pageCounter = 1;
+
 
     public synchronized void keyboard(String chatId, String msg) {
 
@@ -118,7 +142,9 @@ public class TgBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+
         inlineKeyboard(chatId);
+
     }
 
     public synchronized void inlineKeyboard(String chatId) {
@@ -128,12 +154,12 @@ public class TgBot extends TelegramLongPollingBot {
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        List<InlineKeyboardButton> button1 = new ArrayList<>();
-        InlineKeyboardButton but = new InlineKeyboardButton();
-        but.setText("Add");
-        but.setCallbackData("Add to cart");
-        button1.add(but);
-        keyboard.add(button1);
+        List<InlineKeyboardButton> inlineRow1 = new ArrayList<>();
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText("Add");
+        button.setCallbackData("Added");
+        inlineRow1.add(button);
+        keyboard.add(inlineRow1);
 
         inlineKeyboardMarkup.setKeyboard(keyboard);
         sendMessage.setReplyMarkup(inlineKeyboardMarkup);
@@ -148,11 +174,13 @@ public class TgBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
+
         return "R231Bot";
     }
 
     @Override
     public String getBotToken() {
+
         return "5793024716:AAHBn08nBwGe0D864bLUFX4UtFhLt412ppk";
     }
 }
