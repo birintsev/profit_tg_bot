@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -12,7 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import static org.profit.telegrambot.AntiHardcode.*;
 
@@ -21,11 +24,12 @@ public class TgBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-        if (update.hasMessage()){
+        if (update.hasMessage() && !update.getMessage().hasPhoto()){
             String chatId = update.getMessage().getChatId().toString();
             String message = update.getMessage().getText();
 
             switch (message) {
+
                 case "Main Page", "/start", "Shop's Info" -> firstKeyboard(chatId, message);
                 case "Go Shopping", "Forward", "Back" -> keyboard(chatId, message);
             }
@@ -51,6 +55,15 @@ public class TgBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
+        } else if (update.getMessage().hasPhoto()){
+
+            List<PhotoSize> photos = update.getMessage().getPhoto();
+            String fileId = Objects.requireNonNull(photos.stream()
+                    .sorted(Comparator.comparing(PhotoSize::getFileSize).reversed())
+                    .findFirst()
+                    .orElse(null)).getFileId();
+
+            System.out.println(fileId);
         }
 
 
@@ -92,8 +105,8 @@ public class TgBot extends TelegramLongPollingBot {
         message.setReplyMarkup(keyboardMarkup);
 
         switch (msg) {
-            case "/start", "Main Page" -> message.setText("Welcome to our shop!");
-            case "Shop's Info" -> message.setText("Info");
+            case "/start", "Main Page" -> message.setText(greetingMessage);
+            case "Shop's Info" -> message.setText(botDescription);
         }
 
         try {
@@ -175,12 +188,12 @@ public class TgBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
 
-        return "R231Bot";
+        return name;
     }
 
     @Override
     public String getBotToken() {
 
-        return "5793024716:AAHBn08nBwGe0D864bLUFX4UtFhLt412ppk";
+        return token;
     }
 }

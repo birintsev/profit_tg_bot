@@ -1,15 +1,38 @@
 package org.profit.telegrambot;
 
 public class AntiHardcode {
+
+    public static String botDescription = """
+            This is a test bot for Java courses disguised as a tea shop.
+
+            It has two simple and one inline keyboards, can send images, and receive them.
+
+            More features coming soon :)""";
+
+    public static String greetingMessage = """
+            Welcome to our Tea Shop!
+
+            We have a wide selection of traditional Chinese tea for reasonable prices.
+
+            Just click 'Go Shopping' to see what we can offer you!
+
+            For any additional information click 'Shop's Info'""";
+
+    protected static String token = "5793024716:AAHBn08nBwGe0D864bLUFX4UtFhLt412ppk";
+    public static String name = "R231Bot";
     public static int addCounter = 1;
     public static int pageCounter = 1;
     public static String imagePath;
 
     public void chosePath(int pageCounter) {
+
         switch (pageCounter){
-            case 1 ->  imagePath = "https://imgs.search.brave.com/w4_fte-fEHh-v9ENx7XVNwoBa5ZLn1tXbr_dS7qAJLY/rs:fit:400:400:1/g:ce/aHR0cDovLzQuYnAu/YmxvZ3Nwb3QuY29t/L19uaWVJR1dpQ3Nu/dy9TU1E0SHpKR0Zu/SS9BQUFBQUFBQUNF/ay82WjhKQy1TVlRR/US9zNDAwL2NoaW5h/dGVhMS5KUEc";
-            case 2 -> imagePath = "https://imgs.search.brave.com/cqkyNfxneYLU8TcYepasTOrqbkisWYXt6DLzKO4E_C4/rs:fit:400:400:1/g:ce/aHR0cHM6Ly8xLmJw/LmJsb2dzcG90LmNv/bS9fbmllSUdXaUNz/bncvU1NRNEgyQjNR/R0kvQUFBQUFBQUFD/RWMvUURrQnhKeVc0/eEkvczQwMC9jaGlu/YXRlYTIuSlBH";
-            case 3 -> imagePath = "https://imgs.search.brave.com/p8ndCEebKUqPjlnBo5uG9jfAWyjFqK61K0wf1D8j8UU/rs:fit:750:750:1/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzFjL2Vk/LzJmLzFjZWQyZjMz/YmIyN2ZmNWUxZGJh/NTMyNWUzMzY5NjA1/LmpwZw";
+            case 1 ->  imagePath = "AgACAgIAAxkBAAIJCWMPh9WArhJP40wpbFuk8C0Ex_KdAALWvjEbxmqASEb1cdcWjNHNAQADAgADeQADKQQ";
+            case 2 -> imagePath = "AgACAgIAAxkBAAIJCmMPh_lBNBhDfBsd1mCRljKqM4cqAALXvjEbxmqASPt-0PyHLogOAQADAgADeQADKQQ";
+            case 3 -> imagePath = "AgACAgIAAxkBAAIJC2MPiDUcFJWhMdqwenRXg-rbLBl-AALrvjEbxmqASMliwo7z-XhRAQADAgADeAADKQQ";
+            case 4 -> imagePath = "AgACAgIAAxkBAAIJDGMPiJ-HQRxQAAH00hXjCXappD7RxAAC9b4xG8ZqgEicMz0Psyx_oQEAAwIAA3gAAykE";
+            case 5 -> imagePath = "AgACAgIAAxkBAAIJDWMPiMFBW8HzFhhR6btOtQEUsRHHAAL4vjEbxmqASPg-ciL6Pe2GAQADAgADeAADKQQ";
+            case 6 -> imagePath = "AgACAgIAAxkBAAIJDmMPiON05Bw-OufwDGZ3JklUQCzvAAL5vjEbxmqASIPi_6XO2rjZAQADAgADeAADKQQ";
         }
 
     }
