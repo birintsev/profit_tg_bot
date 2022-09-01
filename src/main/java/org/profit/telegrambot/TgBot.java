@@ -24,7 +24,7 @@ public class TgBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-        if (update.hasMessage() && !update.getMessage().hasPhoto()){
+        if (update.hasMessage() && update.getMessage().hasText()){
             String chatId = update.getMessage().getChatId().toString();
             String message = update.getMessage().getText();
 
@@ -33,7 +33,6 @@ public class TgBot extends TelegramLongPollingBot {
                 case "Main Page", "/start", "Shop's Info" -> firstKeyboard(chatId, message);
                 case "Go Shopping", "Forward", "Back" -> keyboard(chatId, message);
             }
-
         } else if (update.hasCallbackQuery()) {
 
             String chatId = update.getCallbackQuery().getMessage().getChatId().toString();
