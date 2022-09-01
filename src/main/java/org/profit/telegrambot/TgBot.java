@@ -12,10 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+
+import java.util.*;
 
 import static org.profit.telegrambot.AntiHardcode.*;
 
@@ -27,6 +25,10 @@ public class TgBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()){
             String chatId = update.getMessage().getChatId().toString();
             String message = update.getMessage().getText();
+
+            if (message.matches("[1-9]")){
+                sendMessage(chatId, "Enter the page you want to see:");
+            }
 
             switch (message) {
 
@@ -66,6 +68,29 @@ public class TgBot extends TelegramLongPollingBot {
         }
 
 
+    }
+
+    public synchronized void sendMessage(String chatId, String text){
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(text);
+
+        try{
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+    public synchronized void sendMessage(String chatId, String text, ReplyKeyboardMarkup markup){
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(text);
+        message.setReplyMarkup(markup);
+        try{
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     public synchronized void sendPhoto(String chatId, int pageCounter) {
@@ -143,18 +168,18 @@ public class TgBot extends TelegramLongPollingBot {
 
         sendPhoto(chatId, pageCounter);
 
-        SendMessage message = new SendMessage();
+        /*SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText("Product description...");
-        message.setAllowSendingWithoutReply(true);
         message.setReplyMarkup(keyboardMarkup);
 
         try {
             execute(message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
-        }
+        }*/
 
+        sendMessage(chatId, "Product description...", keyboardMarkup);
         inlineKeyboard(chatId);
 
     }
