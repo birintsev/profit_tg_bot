@@ -1,5 +1,4 @@
 package org.profit.telegrambot;
-
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -27,11 +26,10 @@ public class TgBot extends TelegramLongPollingBot {
             String message = update.getMessage().getText();
 
             if (message.matches("[1-9]")){
-                sendMessage(chatId, "Enter the page you want to see:");
+                sendMessage(chatId, "Enter the page you want to see:", (ReplyKeyboardMarkup) null);
             }
 
             switch (message) {
-
                 case "Main Page", "/start", "Shop's Info" -> firstKeyboard(chatId, message);
                 case "Go Shopping", "Forward", "Back" -> keyboard(chatId, message);
             }
@@ -43,7 +41,7 @@ public class TgBot extends TelegramLongPollingBot {
 
             if (callData.equals("Added")){
 
-                String answer = "Added " + addCounter;
+                String answer = "Added " + addCounter + " items in total";
                 EditMessageText newMessage = new EditMessageText();
                 newMessage.setChatId(chatId);
                 newMessage.setMessageId(messageId);
@@ -66,11 +64,9 @@ public class TgBot extends TelegramLongPollingBot {
 
             System.out.println(fileId);
         }
-
-
     }
 
-    public synchronized void sendMessage(String chatId, String text){
+    /*public synchronized void sendMessage(String chatId, String text){
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(text);
@@ -80,8 +76,19 @@ public class TgBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-    }
+    }*/ // Currently in doubt whether this method is needed or not
     public synchronized void sendMessage(String chatId, String text, ReplyKeyboardMarkup markup){
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(text);
+        message.setReplyMarkup(markup);
+        try{
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+    public synchronized void sendMessage(String chatId, String text, InlineKeyboardMarkup markup){
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(text);
@@ -95,12 +102,13 @@ public class TgBot extends TelegramLongPollingBot {
 
     public synchronized void sendPhoto(String chatId, int pageCounter) {
 
-        AntiHardcode antiHardcode = new AntiHardcode();
-        antiHardcode.chosePath(pageCounter);
+        chosePathAndDescription(pageCounter);
 
         SendPhoto photo = new SendPhoto();
         photo.setChatId(chatId);
         photo.setPhoto(new InputFile(imagePath));
+        photo.setCaption(photoCaption);
+        photo.setReplyMarkup(keyboardMarkup);
 
         try {
             execute(photo);
@@ -124,28 +132,14 @@ public class TgBot extends TelegramLongPollingBot {
         keyboardMarkup.setKeyboard(firstKeyboard);
         keyboardMarkup.setOneTimeKeyboard(false);
 
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setReplyMarkup(keyboardMarkup);
-
         switch (msg) {
-            case "/start", "Main Page" -> message.setText(greetingMessage);
-            case "Shop's Info" -> message.setText(botDescription);
+            case "/start", "Main Page" -> sendMessage(chatId, greetingMessage, keyboardMarkup);
+            case "Shop's Info" -> sendMessage(chatId, botDescription, keyboardMarkup);
         }
-
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-
     }
-
-
 
     public synchronized void keyboard(String chatId, String msg) {
 
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         ArrayList<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow row1 = new KeyboardRow();
         KeyboardRow row2 = new KeyboardRow();
@@ -158,7 +152,7 @@ public class TgBot extends TelegramLongPollingBot {
         keyboardMarkup.setResizeKeyboard(true);
         keyboardMarkup.setKeyboard(keyboard);
 
-        if (msg.equals("Forward")) {
+        if (msg.equals("Forward") && pageCounter < totalItems) {
             pageCounter++;
             row1.set(1, String.valueOf(pageCounter));
         } else if (msg.equals("Back") && pageCounter > 1) {
@@ -167,27 +161,10 @@ public class TgBot extends TelegramLongPollingBot {
         }
 
         sendPhoto(chatId, pageCounter);
-
-        /*SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText("Product description...");
-        message.setReplyMarkup(keyboardMarkup);
-
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }*/
-
-        sendMessage(chatId, "Product description...", keyboardMarkup);
         inlineKeyboard(chatId);
-
     }
 
     public synchronized void inlineKeyboard(String chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText("Add to cart?");
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
@@ -197,15 +174,9 @@ public class TgBot extends TelegramLongPollingBot {
         button.setCallbackData("Added");
         inlineRow1.add(button);
         keyboard.add(inlineRow1);
-
         inlineKeyboardMarkup.setKeyboard(keyboard);
-        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
 
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        sendMessage(chatId, "Add to cart?", inlineKeyboardMarkup);
     }
 
 
