@@ -3,14 +3,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 
 public class AntiHardcode {
 
-   static String botDescription = """
+   static final String botDescription = """
             This is a test bot for Java courses disguised as a tea shop.
 
             It has two simple and one inline keyboards, can send images, and receive them.
 
             More features coming soon :)""";
 
-   static String greetingMessage = """
+   static final String greetingMessage = """
             Welcome to our Tea Shop!
 
             We have a wide selection of traditional Chinese tea for reasonable prices.
@@ -19,13 +19,13 @@ public class AntiHardcode {
 
             For any additional information click 'Shop's Info'""";
 
-    protected static String token = "5793024716:AAHBn08nBwGe0D864bLUFX4UtFhLt412ppk";
-    static String name = "R231Bot";
+    protected static final String token = "5793024716:AAHBn08nBwGe0D864bLUFX4UtFhLt412ppk";
+    static final String name = "R231Bot";
     static int addCounter = 1;
     static int pageCounter = 1;
     static String imagePath;
     static String photoCaption;
-    static long totalItems = 6;
+    static final long totalItems = 6;
 
     static ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
 
