@@ -63,7 +63,7 @@ public class TgBot extends TelegramLongPollingBot {
                     .orElse(null)).getFileId();
 
             System.out.println(fileId);
-        }
+        } // This is a method to get photo's fileId to use it later
     }
 
     /*public synchronized void sendMessage(String chatId, String text){
