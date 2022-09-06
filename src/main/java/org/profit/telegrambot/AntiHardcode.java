@@ -1,6 +1,8 @@
 package org.profit.telegrambot;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
+import java.util.ArrayList;
+
 public class AntiHardcode {
 
    static final String botDescription = """
@@ -26,7 +28,7 @@ public class AntiHardcode {
     static String imagePath;
     static String photoCaption;
     static final long totalItems = 6;
-
+    static ArrayList<Integer> products = new ArrayList<>();
     static ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
 
     public static void chosePathAndDescription(int pageCounter) {

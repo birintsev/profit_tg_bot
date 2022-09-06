@@ -21,6 +21,7 @@ public class TgBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
+
         if (update.hasMessage() && update.getMessage().hasText()){
             String chatId = update.getMessage().getChatId().toString();
             String message = update.getMessage().getText();
@@ -32,6 +33,12 @@ public class TgBot extends TelegramLongPollingBot {
             switch (message) {
                 case "Main Page", "/start", "Shop's Info" -> firstKeyboard(chatId, message);
                 case "Go Shopping", "Forward", "Back" -> keyboard(chatId, message);
+                case "My Cart" -> {
+                    for (Integer product : products) {
+                        sendPhoto(chatId, product);
+                    }
+                    sendMessage(chatId,"Go to payment?", (ReplyKeyboardMarkup) null);
+                }
             }
         } else if (update.hasCallbackQuery()) {
 
@@ -48,6 +55,7 @@ public class TgBot extends TelegramLongPollingBot {
                 newMessage.setText(answer);
                 addCounter ++;
 
+                addToCart();
                 try {
                     execute(newMessage);
                 } catch (TelegramApiException e) {
@@ -147,6 +155,7 @@ public class TgBot extends TelegramLongPollingBot {
         row1.add(String.valueOf(pageCounter));
         row1.add("Forward");
         row2.add("Main Page");
+        row2.add("My Cart");
         keyboard.add(row1);
         keyboard.add(row2);
         keyboardMarkup.setResizeKeyboard(true);
@@ -177,6 +186,11 @@ public class TgBot extends TelegramLongPollingBot {
         inlineKeyboardMarkup.setKeyboard(keyboard);
 
         sendMessage(chatId, "Add to cart?", inlineKeyboardMarkup);
+    }
+
+
+    public synchronized void addToCart(){
+        products.add(pageCounter);
     }
 
 
