@@ -75,13 +75,14 @@ public class ShopBot extends TelegramLongPollingBot {
         }
     }
 
+
     @Override
     public String getBotUsername() {
-        return ComponentContainer.BOT_NAME;
+        return App.botName;
     }
 
     @Override
     public String getBotToken() {
-        return ComponentContainer.BOT_TOKEN;
+        return App.botToken;
     }
 }
