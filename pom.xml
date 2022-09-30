@@ -1,25 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project> xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.example</groupId>
-  <artifactId>tgbt</artifactId>
+  <groupId>org.profit.telegrambot</groupId>
+  <artifactId>shop-bot</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+  <properties>
+
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <slf4j.version>2.0.1</slf4j.version>
+    <postgresql.version>42.5.0</postgresql.version>
+    <lombok.version>1.18.24</lombok.version>
+    <telegram.version>6.1.0</telegram.version>
+
+  </properties>
+
   <dependencies>
+
     <dependency>
       <groupId>org.telegram</groupId>
       <artifactId>telegrambots</artifactId>
-      <version>6.1.0</version>
+      <version>${telegram.version}</version>
     </dependency>
-  </dependencies>
 
-  <properties>
-    <maven.compiler.source>18</maven.compiler.source>
-    <maven.compiler.target>18</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${postgresql.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+
+  </dependencies>
 
 </project>
