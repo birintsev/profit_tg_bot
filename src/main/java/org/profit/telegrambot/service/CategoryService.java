@@ -1,13 +1,14 @@
 package org.profit.telegrambot.service;
 
 
-import org.profit.telegrambot.container.ComponentContainer;
 import org.profit.telegrambot.database.Database;
 import org.profit.telegrambot.model.Category;
 import org.profit.telegrambot.util.InlineKeyboardUtil;
 
 import java.sql.*;
 import java.util.NoSuchElementException;
+
+import static org.profit.telegrambot.container.ComponentContainer.my_telegram_bot;
 
 public class CategoryService {
     public static Category getCategoryById(Integer id) {
@@ -119,7 +120,7 @@ public class CategoryService {
             }
         }
         loadCategoryList();
-        ComponentContainer.my_telegram_bot.sendMessage(chatId, "Category name was changed", InlineKeyboardUtil.categoryShow());
+        my_telegram_bot.sendMessage(chatId, "Category name was changed", InlineKeyboardUtil.categoryShow());
     }
 }
 

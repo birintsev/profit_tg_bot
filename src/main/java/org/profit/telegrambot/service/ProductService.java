@@ -1,6 +1,5 @@
 package org.profit.telegrambot.service;
 
-import org.profit.telegrambot.container.ComponentContainer;
 import org.profit.telegrambot.database.Database;
 import org.profit.telegrambot.model.Product;
 import org.profit.telegrambot.util.InlineKeyboardUtil;
@@ -10,6 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static org.profit.telegrambot.ShopBot.conf;
+import static org.profit.telegrambot.container.ComponentContainer.my_telegram_bot;
 
 
 public class ProductService {
@@ -53,7 +53,7 @@ public class ProductService {
 
             for (Product product : Database.productList) {
                 if ((chatId.equals(conf.getProperty("adminId"))) && product.getCategoryId().equals(categoryId)){
-                    ComponentContainer.my_telegram_bot.sendPhoto(chatId, String.format("""
+                    my_telegram_bot.sendPhoto(chatId, String.format("""
                                     🏆 Category: %s
                                     💻 Product: %s
                                     💸 Cost: %s
@@ -68,7 +68,7 @@ public class ProductService {
                                     InlineKeyboardUtil.deleteOrUpdateProduct(product.getId()));
 
                 } else if (product.getCategoryId().equals(categoryId)){
-                    ComponentContainer.my_telegram_bot.sendPhoto(chatId, String.format("""
+                    my_telegram_bot.sendPhoto(chatId, String.format("""
                                     💻 Product: %s
                                     💸 Cost: %s
                                     Description: %s""",

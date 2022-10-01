@@ -1,7 +1,5 @@
 package org.profit.telegrambot.util;
 
-
-import org.profit.telegrambot.container.ComponentContainer;
 import org.profit.telegrambot.database.Database;
 import org.profit.telegrambot.model.Category;
 import org.profit.telegrambot.service.CategoryService;
@@ -13,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.profit.telegrambot.ShopBot.conf;
+import static org.profit.telegrambot.container.ComponentContainer.quantityMap;
 
 public class InlineKeyboardUtil {
 
@@ -188,7 +187,7 @@ public class InlineKeyboardUtil {
     public static InlineKeyboardMarkup productQuantity(String chatId){
         InlineKeyboardButton back = createButton("<", "back");
         InlineKeyboardButton forward = createButton(">", "forward");
-        InlineKeyboardButton quantity = createButton(String.valueOf(ComponentContainer.quantityMap.get(chatId)), "quantity");
+        InlineKeyboardButton quantity = createButton(String.valueOf(quantityMap.get(chatId)), "quantity");
         InlineKeyboardButton accept = createButton("yes", "accept_quantity");
         InlineKeyboardButton decline = createButton("no", "decline_quantity");
 

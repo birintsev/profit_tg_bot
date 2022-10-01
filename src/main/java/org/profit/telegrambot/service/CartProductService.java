@@ -11,6 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import java.util.Objects;
 import java.util.Optional;
 
+import static org.profit.telegrambot.container.ComponentContainer.my_telegram_bot;
+
 public class CartProductService {
     public static void addToCart(String userId, Integer productId, Integer quantity){
         Customer customer = CustomerService.getCustomerById(userId);
@@ -37,12 +39,12 @@ public class CartProductService {
 
     public static void showCart(String chatId, String customerId){
         ProductService.loadProductList();
-        ComponentContainer.my_telegram_bot.sendMessage(chatId, "Your cart:", (InlineKeyboardMarkup) null);
+        my_telegram_bot.sendMessage(chatId, "Your cart:", (InlineKeyboardMarkup) null);
 
         for (CartProduct cartProduct : Database.cartProducts){
             if (Objects.equals(cartProduct.getCustomer().getId(), customerId)){
                 Product product = cartProduct.getProduct();
-                ComponentContainer.my_telegram_bot.sendPhoto(chatId, String.format("""
+                my_telegram_bot.sendPhoto(chatId, String.format("""
                                     💻 Product: %s
                                     💸 Cost: %s
                                     Description: %s
@@ -58,6 +60,6 @@ public class CartProductService {
     }
     public static void deleteFromCart(Integer cartProductId, int messageId, String chatId) {
         Database.cartProducts.removeIf(cartProduct -> cartProduct.getId().equals(cartProductId));
-        ComponentContainer.my_telegram_bot.deleteMessage(chatId, messageId);
+        my_telegram_bot.deleteMessage(chatId, messageId);
     }
 }
