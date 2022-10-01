@@ -23,6 +23,7 @@ public class InlineKeyboardUtil {
     private static List<InlineKeyboardButton> createRow(InlineKeyboardButton... buttons) {
         return Arrays.asList(buttons);
     }
+    @SafeVarargs
     private static List<List<InlineKeyboardButton>> createRowList(List<InlineKeyboardButton>... rows) {
         return Arrays.asList(rows);
     }
