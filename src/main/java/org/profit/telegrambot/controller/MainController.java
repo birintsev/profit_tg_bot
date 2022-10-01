@@ -2,6 +2,7 @@ package org.profit.telegrambot.controller;
 
 import org.profit.telegrambot.enums.CustomerStatus;
 import org.profit.telegrambot.model.Customer;
+import org.profit.telegrambot.model.Product;
 import org.profit.telegrambot.service.CartProductService;
 import org.profit.telegrambot.service.CategoryService;
 import org.profit.telegrambot.service.CustomerService;
@@ -14,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 import java.util.Objects;
 
+import static org.profit.telegrambot.ShopBot.conf;
 import static org.profit.telegrambot.container.ComponentContainer.*;
 
 public class MainController {
@@ -37,29 +39,29 @@ public class MainController {
             customerStepMap.remove(chatId);
         } else if (Objects.equals(customerStepMap.get(chatId), CustomerStatus.ENTERED_QUANTITY)){
             quantityMap.put(chatId, Integer.valueOf(text));
-            my_telegram_bot.editMessage(chatId, "Choose the quantity:", quantityMap.get(chatId + 2), InlineKeyboardUtil.productQuantity(chatId));
-            customerStepMap.remove(chatId);
+            my_telegram_bot.editMessage(chatId, conf.getProperty("chooseQuantity"), quantityMap.get(chatId + 2), InlineKeyboardUtil.productQuantity(chatId));
+            customerStepMap.put(chatId, CustomerStatus.ADDING_TO_CART);
         }
         switch (text) {
 
             case "/start":
                 if (customer == null) {
                     my_telegram_bot.sendMessage(chatId,
-                            "Welcome!\n" + "To start, please send me your number:",
+                            conf.getProperty("welcomingMessage"),
                             KeyboardUtil.contactMarkup());
                 } else {
                     my_telegram_bot.sendMessage(chatId,
-                            "Welcome to our shop again!\n\nChoose an option from menu:\n",
+                            conf.getProperty("welcomingAgainMessage"),
                             InlineKeyboardUtil.menu());
                 }
                 break;
             case "Categories":
                 my_telegram_bot.deleteMessage(chatId, messageId);
-                my_telegram_bot.sendMessage(chatId, "Choose a category:", InlineKeyboardUtil.categoryShow());
+                my_telegram_bot.sendMessage(chatId, conf.getProperty("chooseCategory"), InlineKeyboardUtil.categoryShow());
                 break;
             case "Back to menu", "Main menu":
                 my_telegram_bot.deleteMessage(chatId, messageId);
-                my_telegram_bot.sendMessage(chatId, "Choose an option:", InlineKeyboardUtil.menu());
+                my_telegram_bot.sendMessage(chatId, conf.getProperty("chooseOption"), InlineKeyboardUtil.menu());
                 break;
             case  "🛒 Cart":
                 if (customerStepMap.containsValue(CustomerStatus.ACCEPTED_QUANTITY)){
@@ -85,7 +87,7 @@ public class MainController {
         CustomerService.addCustomer(customer);
 
         my_telegram_bot.deleteMessage(chatId, messageId);
-        my_telegram_bot.sendMessage(chatId, "Choose an option:", InlineKeyboardUtil.menu());
+        my_telegram_bot.sendMessage(chatId, conf.getProperty("chooseOption"), InlineKeyboardUtil.menu());
     }
 
 
@@ -100,7 +102,7 @@ public class MainController {
             }
             case "to_categories" -> {
                 my_telegram_bot.deleteMessage(chatId, messageId);
-                my_telegram_bot.sendMessage(chatId, "Choose a category:", InlineKeyboardUtil.categoryShow());
+                my_telegram_bot.sendMessage(chatId, conf.getProperty("chooseCategory"), InlineKeyboardUtil.categoryShow());
             }
             case "help" -> {
                 my_telegram_bot.deleteMessage(chatId, messageId);
@@ -109,7 +111,7 @@ public class MainController {
             }
             case "to_main_menu" -> {
                 my_telegram_bot.deleteMessage(chatId, messageId);
-                my_telegram_bot.sendMessage(chatId, "Choose a category:", InlineKeyboardUtil.menu());
+                my_telegram_bot.sendMessage(chatId, conf.getProperty("chooseCategory"), InlineKeyboardUtil.menu());
             }
         }
 
@@ -126,7 +128,7 @@ public class MainController {
             customerStepMap.put(chatId, CustomerStatus.ADDING_TO_CART);
             productIdMap.put(chatId, productId);
             my_telegram_bot.editMessage(chatId,
-                    "Choose the quantity:",
+                    conf.getProperty("chooseQuantity"),
                     messageId,
                     InlineKeyboardUtil.productQuantity(chatId));
         } else if (data.startsWith("delete_from_cart")){
@@ -137,7 +139,7 @@ public class MainController {
                 case "forward" -> {
                     quantityMap.replace(chatId, quantityMap.get(chatId) + 1);
                     my_telegram_bot.editMessage(chatId,
-                            "Choose the quantity:",
+                            conf.getProperty("chooseQuantity"),
                             messageId,
                             InlineKeyboardUtil.productQuantity(chatId));
                 }
@@ -145,12 +147,13 @@ public class MainController {
                     if (quantityMap.get(chatId) > 1){
                         quantityMap.replace(chatId, quantityMap.get(chatId) - 1);
                         my_telegram_bot.editMessage(chatId,
-                                "Choose the quantity:",
+                                conf.getProperty("chooseQuantity"),
                                 messageId,
                                 InlineKeyboardUtil.productQuantity(chatId));
                     }
                 }
                 case "accept_quantity" -> {
+                    System.out.println(quantityMap.get(chatId));
                     my_telegram_bot.editMessage(chatId,
                             quantityMap.get(chatId) + " Product is added to cart",
                             messageId,
@@ -161,8 +164,12 @@ public class MainController {
                     CartProductService.addToCart(userId, productIdMap.get(chatId), quantityMap.get(chatId));
                 }
                 case "decline_quantity" -> {
+                    Product product = ProductService.getProductById(productIdMap.get(chatId));
                     my_telegram_bot.editMessage(chatId,
-                            "description of product",
+                            String.format(conf.getProperty("productInfoCustomer"),
+                                    product.getName(),
+                                    product.getPrice(),
+                                    product.getDescription()),
                             messageId,
                             InlineKeyboardUtil.addToCart(productIdMap.get(chatId)));
                 }

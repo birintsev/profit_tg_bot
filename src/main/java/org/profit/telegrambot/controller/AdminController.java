@@ -64,13 +64,6 @@ public class AdminController {
                     Product product = productMap.get(chatId);
                     product.setCategoryId(categoryId);
                 }
-                case DELETE_PRODUCT -> {
-
-                    ProductService.showProductList(chatId, categoryId);
-                    my_telegram_bot.sendMessage(chatId,
-                            "Enter the id of the product you want to delete:",
-                            (InlineKeyboardMarkup) null);
-                }
                 case SHOW_PRODUCTS -> {
 
                     my_telegram_bot.sendMessage(chatId,
@@ -127,12 +120,8 @@ public class AdminController {
             String toChange = arr[1];
 
             Product product = ProductService.getProductById(productIdMap.get(chatId));
-            my_telegram_bot.sendPhoto(chatId, String.format("""
-                                    🏆 Category: %s
-                                    💻 Product: %s
-                                    💸 Cost: %s
-                                    ID: %s
-                                    Description: %s""",
+            my_telegram_bot.sendPhoto(chatId,
+                    String.format(conf.getProperty("productInfoAdmin"),
                             Objects.requireNonNull(CategoryService.getCategoryById(product.getCategoryId())).getName(),
                             product.getName(),
                             product.getPrice(),
@@ -188,7 +177,7 @@ public class AdminController {
                  case "delete_category" -> {
                      stepMap.put(chatId, AdminStatus.DELETE_CATEGORY);
                      my_telegram_bot.sendMessage(chatId,
-                             "Enter the category you want to delete:",
+                             "Click the category you want to delete:",
                              InlineKeyboardUtil.categoryShow());
 
                  }
@@ -199,14 +188,17 @@ public class AdminController {
                              InlineKeyboardUtil.categoryShow());
                      stepMap.put(chatId, AdminStatus.SHOW_PRODUCTS);
                  }
-                 case "delete_category_cancel", "to_main_menu" ->{
+                 case "delete_category_cancel", "to_main_menu", "add_category_cancel" ->{
+                     categoryMap.remove(chatId);
+                     stepMap.remove(chatId);
+
                      my_telegram_bot.sendMessage(chatId,
-                             "Select an action:",
+                             conf.getProperty("selectAction"),
                              InlineKeyboardUtil.categoryCRUDMenu());
                  }
                  case "show_category_list" -> {
                      my_telegram_bot.sendMessage(chatId,
-                             "All categories:",
+                             conf.getProperty("Choose a category:"),
                              InlineKeyboardUtil.categoryShow());
                      stepMap.put(chatId, AdminStatus.SHOW_PRODUCTS);
 
@@ -220,22 +212,13 @@ public class AdminController {
                      productMap.remove(chatId);
 
                      my_telegram_bot.sendMessage(chatId,
-                             category.getName() + " saved.\n\n" + "Select an action:",
-                             InlineKeyboardUtil.categoryCRUDMenu());
-
-                 }
-                 case "add_category_cancel" -> {
-                     categoryMap.remove(chatId);
-                     stepMap.remove(chatId);
-
-                     my_telegram_bot.sendMessage(chatId,
-                             "Select an action:",
+                             category.getName() + " saved.\n\n" + conf.getProperty("selectAction"),
                              InlineKeyboardUtil.categoryCRUDMenu());
 
                  }
                  case "add_product" -> {
                      my_telegram_bot.sendMessage(chatId,
-                             "Choose one of the categories:",
+                             conf.getProperty("chooseCategory"),
                              InlineKeyboardUtil.categoryShowForProducts());
 
                      productMap.remove(chatId);
@@ -252,7 +235,7 @@ public class AdminController {
                      categoryMap.remove(chatId);
 
                      my_telegram_bot.sendMessage(chatId,
-                             product.getName() + " saved.\n\n" + "Select an action:",
+                             product.getName() + " saved.\n\n" + conf.getProperty("selectAction"),
                              InlineKeyboardUtil.backToCategories());
 
                  }
@@ -261,13 +244,13 @@ public class AdminController {
                      stepMap.remove(chatId);
 
                      my_telegram_bot.sendMessage(chatId,
-                             "Select an action:",
+                             conf.getProperty("selectAction"),
                              InlineKeyboardUtil.categoryCRUDMenu());
 
                  }
                  case "show_product_list" -> {
                      my_telegram_bot.sendMessage(chatId,
-                             "Choose one of the categories:",
+                             conf.getProperty("chooseCategory"),
                              InlineKeyboardUtil.categoryShowForProducts());
                      stepMap.put(chatId, AdminStatus.SHOW_PRODUCTS);
 
@@ -279,10 +262,14 @@ public class AdminController {
         String text = message.getText();
 
         if (text.equals("/start")) {
-            my_telegram_bot.sendMessage(chatId, "Select an action:", KeyboardUtil.adminMenu());
+            my_telegram_bot.sendMessage(chatId,
+                    conf.getProperty("selectAction"),
+                    KeyboardUtil.adminMenu());
 
         } else if (text.equals("Categories and Products\nCRUD")) {
-            my_telegram_bot.sendMessage(chatId, "Select an action:", InlineKeyboardUtil.categoryCRUDMenu());
+            my_telegram_bot.sendMessage(chatId,
+                    conf.getProperty("selectAction"),
+                    InlineKeyboardUtil.categoryCRUDMenu());
             System.out.println(message.getFrom().getId());
 
         } else if (stepMap.containsKey(chatId)) {
@@ -321,16 +308,14 @@ public class AdminController {
                 case IMAGE_SENT -> {
 
                     product.setDescription(text);
-                    my_telegram_bot.sendPhoto(chatId, String.format("""
-                                Category: %s
-                                Product: %s\s
-                                Cost: %s $
-                                Description: %s""",
+                    my_telegram_bot.sendPhoto(chatId,
+                            String.format(conf.getProperty("productInfoAdmin"),
                                     Objects.requireNonNull(CategoryService.getCategoryById(product.getCategoryId())).getName(),
                                     product.getName(),
                                     product.getPrice(),
                                     product.getDescription()),
-                                    product.getImage(), null);
+                                    product.getImage(),
+                             null);
 
                     my_telegram_bot.sendMessage(chatId,
                             "Add the following product to the database?",
@@ -341,7 +326,7 @@ public class AdminController {
                     ProductService.renameProduct(productIdMap.get(chatId), text, categoryIdMap.get(chatId));
                     crudStepMap.remove(chatId);
                     my_telegram_bot.sendMessage(chatId,
-                            "The product name was changed",
+                            conf.getProperty("changeSuccessful"),
                             InlineKeyboardUtil.backToCategories());
                 }
                 case CHANGE_PRICE -> {
@@ -349,7 +334,7 @@ public class AdminController {
                     ProductService.updateProductPrice(productIdMap.get(chatId), Double.parseDouble(text));
                     crudStepMap.remove(chatId);
                     my_telegram_bot.sendMessage(chatId,
-                            "The product price was changed",
+                            conf.getProperty("changeSuccessful"),
                             InlineKeyboardUtil.backToCategories());
                 }
                 case CHANGE_DESCRIPTION -> {
@@ -357,7 +342,7 @@ public class AdminController {
                     ProductService.updateProductDescription(productIdMap.get(chatId), text);
                     crudStepMap.remove(chatId);
                     my_telegram_bot.sendMessage(chatId,
-                            "The product description was changed",
+                            conf.getProperty("changeSuccessful"),
                             InlineKeyboardUtil.backToCategories());
                 }
                 case CLICKED_ADD_CATEGORY -> {
@@ -372,6 +357,9 @@ public class AdminController {
 
                     CategoryService.renameCategory(categoryIdMap.get(chatId), text, chatId);
                     stepMap.put(chatId, AdminStatus.SHOW_PRODUCTS);
+                    my_telegram_bot.sendMessage(chatId,
+                            "Category name was changed",
+                            InlineKeyboardUtil.categoryShow());
                 }
             }
 

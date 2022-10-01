@@ -120,7 +120,6 @@ public class CategoryService {
             }
         }
         loadCategoryList();
-        my_telegram_bot.sendMessage(chatId, "Category name was changed", InlineKeyboardUtil.categoryShow());
     }
 }
 

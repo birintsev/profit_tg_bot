@@ -53,12 +53,8 @@ public class ProductService {
 
             for (Product product : Database.productList) {
                 if ((chatId.equals(conf.getProperty("adminId"))) && product.getCategoryId().equals(categoryId)){
-                    my_telegram_bot.sendPhoto(chatId, String.format("""
-                                    🏆 Category: %s
-                                    💻 Product: %s
-                                    💸 Cost: %s
-                                    ID: %s
-                                    Description: %s""",
+                    my_telegram_bot.sendPhoto(chatId,
+                            String.format(conf.getProperty("productInfoAdmin"),
                                     Objects.requireNonNull(CategoryService.getCategoryById(product.getCategoryId())).getName(),
                                     product.getName(),
                                     product.getPrice(),
@@ -68,10 +64,8 @@ public class ProductService {
                                     InlineKeyboardUtil.deleteOrUpdateProduct(product.getId()));
 
                 } else if (product.getCategoryId().equals(categoryId)){
-                    my_telegram_bot.sendPhoto(chatId, String.format("""
-                                    💻 Product: %s
-                                    💸 Cost: %s
-                                    Description: %s""",
+                    my_telegram_bot.sendPhoto(chatId,
+                            String.format(conf.getProperty("productInfoCustomer"),
                                     product.getName(),
                                     product.getPrice(),
                                     product.getDescription()),
